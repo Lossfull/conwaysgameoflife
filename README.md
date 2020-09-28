@@ -1,4 +1,5 @@
 # Conway's Game of life
+attempt to implement Conway's Game of life using pygame
 -----------------------
 # Requirements
 * Python 3
