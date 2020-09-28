@@ -5,6 +5,7 @@
 # Requirements
 * Python 3
 * Pygame: pip install pygame
+* Numpy: pip install numpy
 -----------------------
 # Controls
 - Use left mouse button to create life
