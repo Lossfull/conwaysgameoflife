@@ -7,6 +7,7 @@ def main():
     #initialize constants
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
+    GREY = (128,128,128)
     game_size = 30           #game screen is a gamesize x gamesize square
     blockSize = 25           #size of each block
     window_size = game_size*blockSize
