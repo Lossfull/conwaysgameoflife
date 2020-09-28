@@ -7,23 +7,51 @@ def main():
     #initialize constants
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
-    GREY = (128,128,128)
+    game_size = 30           #game screen is a gamesize x gamesize square
+    blockSize = 25           #size of each block
+    window_size = game_size*blockSize
 
-    game_size = 30           #side length of the screen
-    blockSize = 20
-
-    WINDOW_HEIGHT = game_size*blockSize
-    WINDOW_WIDTH = game_size*blockSize
-
-    screen = pygame.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH), 0, 32)
+    screen = pygame.display.set_mode((window_size, window_size), 0, 32)
     screen.fill(BLACK)
     pygame.display.set_caption("Conway's Game of Life")
+    game = gameoflife.gameoflife(game_size, game_size)
 
-    game = gameoflife.gameoflife(game_height, game_width)
     preparation = True
+    startscreen = True
+
+    # Start screen (real pain to work with texts in pygame)
+    while (startscreen):
+        screen.fill(BLACK)
+        font = pygame.font.SysFont("Britannic Bold", 40)
+        font2 = pygame.font.SysFont("Britannic Bold", 30)
+        font3 = pygame.font.SysFont("Britannic Bold", 25)
+        nlabel = font.render("Conway's Game of Life", 1, WHITE)
+        nlabel2 = font2.render('press any button to start', 1, WHITE)
+        nlabel3 = font3.render('Left mouse button to create life', 1, WHITE)
+        nlabel4 = font3.render('Spacebar to start simulating', 1, WHITE)
+
+        text_rect = nlabel.get_rect(center=(window_size / 2, window_size / 2 - 25))
+        text_rect2 = nlabel2.get_rect(center=(window_size / 2, window_size / 2 + 25))
+        text_rect3 = nlabel3.get_rect(center=(window_size-140, window_size-100))
+        text_rect4 = nlabel4.get_rect(center=(window_size-140, window_size-50))
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
+                startscreen = False
+        screen.blit(nlabel, text_rect)
+        screen.blit(nlabel2, text_rect2)
+        screen.blit(nlabel3, text_rect3)
+        screen.blit(nlabel4, text_rect4)
+        pygame.display.flip()
+
+    screen.fill(BLACK)
+    # Drawing grid, placing blocks
+
     while preparation:
-        for x in range(WINDOW_WIDTH // blockSize):
-            for y in range(WINDOW_HEIGHT // blockSize):
+        for x in range(window_size // blockSize):
+            for y in range(window_size // blockSize):
                 rect = pygame.Rect(x * blockSize, y * blockSize,
                                    blockSize, blockSize)
                 pygame.draw.rect(screen, GREY, rect, 1)
@@ -43,10 +71,13 @@ def main():
                 if pygame.K_BACKSPACE:
                     preparation = False
         pygame.display.update()
+
+    # Simulation starts
+
     while True:
         screen.fill(BLACK)
-        for x in range(game_width):
-            for y in range(game_height):
+        for x in range(game_size):
+            for y in range(game_size):
                 if game.gameboard[x][y] == 1:
                     rect = pygame.Rect(x * blockSize + 1, y * blockSize + 1,
                                        blockSize-1, blockSize-1)
@@ -56,17 +87,7 @@ def main():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-            # elif event.type == MOUSEMOTION:
-            #     if (drawing):
-            #         mouse_position = pygame.mouse.get_pos()
-            #         if last_pos is not None:
-            #             pygame.draw.line(screen, BLACK, last_pos, mouse_position, 1)
-            #         last_pos = mouse_position
-            # elif event.type == MOUSEBUTTONUP:
-            #     mouse_position = (0, 0)
-            #     drawing = False
-            # elif event.type == MOUSEBUTTONDOWN:
-            #     drawing = True
+
         pygame.time.wait(80)
         pygame.display.update()
 
